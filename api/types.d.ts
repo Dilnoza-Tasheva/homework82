@@ -5,6 +5,8 @@ export interface Artist {
     information?: string;
 }
 
+export type ArtistWihtoutId = Omit<Artist, '_id'>
+
 export interface Album {
     _id: string;
     title: string;

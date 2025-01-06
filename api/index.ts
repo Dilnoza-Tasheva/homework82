@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import artistsRouter from "./routers/artist";
 import albumsRouter from "./routers/album";
+import tracksRouter from "./routers/track";
 
 const app = express();
 const port = 8000;
@@ -11,6 +12,7 @@ app.use(express.static('public'));
 
 app.use('/artists', artistsRouter);
 app.use('/albums', albumsRouter);
+app.use('/tracks', tracksRouter);
 
 const run = async () => {
     await mongoose.connect('mongodb://localhost/spotify');

@@ -21,3 +21,15 @@ export interface Track {
     album: string;
     length: string;
 }
+
+export interface UserFields {
+    username: string;
+    password: string;
+    token: srtring;
+}
+
+export interface TrackHistory {
+    user: string;
+    track: string;
+    dateTime: string;
+}

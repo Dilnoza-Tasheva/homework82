@@ -13,6 +13,10 @@ const TrackSchema = new Schema({
         required: [true, 'Album is required'],
     },
     length: String,
+    trackNumber: {
+        type: String,
+        required: true,
+    }
 });
 
 const Track = mongoose.model('Track', TrackSchema);

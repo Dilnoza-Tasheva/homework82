@@ -20,7 +20,6 @@ const AppToolbar = () => {
     </AppBar>
 
   );
-
 };
 
 export default AppToolbar;

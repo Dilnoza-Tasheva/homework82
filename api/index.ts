@@ -5,11 +5,13 @@ import albumsRouter from "./routers/album";
 import tracksRouter from "./routers/track";
 import userRouter from "./routers/users";
 import trackHistoryRouter from "./routers/trackHistory";
+import cors from 'cors';
 
 const app = express();
 const port = 8000;
 
 app.use(express.json());
+app.use(cors());
 app.use(express.static('public'));
 
 app.use('/artists', artistsRouter);

@@ -10,12 +10,16 @@ albumsRouter.get('/', async (req, res, next) => {
         const artistId = req.query.artist;
 
         if (artistId) {
-            const albums = await Album.find({ artist: artistId }).populate("artist", "name");
+            const albums = await Album.find({ artist: artistId })
+                .populate("artist", "name")
+                .sort({ releaseYear: -1 });
             res.send(albums);
             return;
         }
 
-        const albums = await Album.find().populate("artist", "name");
+        const albums = await Album.find()
+            .populate("artist", "name")
+            .sort({ releaseYear: -1 });
         res.send(albums);
     } catch (e) {
         next(e);
@@ -30,7 +34,12 @@ albumsRouter.get('/:id', async (req, res, next) => {
     }
 
     try {
-        const album = await Album.findById(id).populate("artist", "name photo information");
+        const album = await Album.findById(id)
+            .populate("artist", "name photo information")
+            .populate({
+                path: 'tracks',
+                options: {sort: {trackNumber: 1}}
+            });
 
         if (!album) res.status(404).send('Album not found!');
 
@@ -54,7 +63,7 @@ albumsRouter.post('/', imagesUpload.single('coverImage'), async (req, res, next)
         artist: req.body.artist,
         title: req.body.title,
         releaseDate: req.body.releaseDate,
-        coverImage: req.file ? '/images' + req.file.filename : null,
+        coverImage: req.file ? 'fixtures' + req.file.filename : null,
     };
 
     try {

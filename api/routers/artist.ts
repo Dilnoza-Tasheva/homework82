@@ -22,7 +22,7 @@ artistsRouter.post('/', imagesUpload.single('photo'), async (req, res, next) => 
 
     const newArtist: ArtistWihtoutId = {
         name: req.body.name,
-        photo: req.file ? '/images' + req.file.filename : null,
+        photo: req.file ? '/fixtures' + req.file.filename : null,
         information: req.body.information,
     };
 

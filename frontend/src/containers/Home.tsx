@@ -27,7 +27,7 @@ const Home = () => {
                                 <CardMedia
                                     component="img"
                                     height="140"
-                                    image={artist.photo || "/placeholder.jpg"}
+                                    image={artist.photo || "assets/react.svg"}
                                     alt={artist.name}
                                 />
                                 <CardContent>

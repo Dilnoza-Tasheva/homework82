@@ -45,3 +45,19 @@ export interface RegisterMutation {
     username: string;
     password: string;
 }
+
+export interface LoginMutation {
+    username: string;
+    password: string;
+}
+
+export interface GlobalError {
+    error: string;
+}
+
+export interface TrackHistory {
+    trackId: string;
+    title: string;
+    performer: string;
+    playedAt: string;
+}

@@ -101,7 +101,7 @@ const Register = () => {
                         Sign Up
                     </Button>
                     <Grid container justifyContent="flex-end">
-                        <Grid >
+                        <Grid>
                             <Link href="#" variant="body2">
                                 Already have an account? Sign in
                             </Link>

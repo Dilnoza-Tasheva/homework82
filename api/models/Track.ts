@@ -16,6 +16,11 @@ const TrackSchema = new Schema({
     trackNumber: {
         type: String,
         required: true,
+    },
+    performer: {
+        type: Schema.Types.ObjectId,
+        ref: 'Artist',
+        required: true,
     }
 });
 

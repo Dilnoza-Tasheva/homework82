@@ -5,6 +5,7 @@ import Home from "./containers/Home.tsx";
 import ArtistDetailsPage from "./features/artists/ArtistDetailsPage.tsx";
 import AlbumDetailsPage from "./features/albums/AlbumDetailsPage.tsx";
 import Register from "./features/users/Register.tsx";
+import TrackHistory from "./features/tracks/TrackHistory.tsx";
 
 
 const App = () => {
@@ -23,6 +24,7 @@ const App = () => {
               <Route path="/artist/:id" element={<ArtistDetailsPage />} />
               <Route path="/album/:id" element={<AlbumDetailsPage />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/track-history" element={<TrackHistory />} />
           </Routes>
         </Container>
       </main>

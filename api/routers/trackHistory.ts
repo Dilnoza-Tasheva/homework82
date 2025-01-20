@@ -25,7 +25,7 @@ trackHistoryRouter.get("/", auth, async (req, res, next) => {
     const user = expressReq.user;
     try {
         const history = await TrackHistory.find({ user: user._id })
-            .populate("track", "title")
+            .populate("track", "title performer")
             .populate({
                 path: "track",
                 populate: { path: "album", select: "title" },

@@ -4,6 +4,7 @@ import {Route, Routes} from "react-router-dom";
 import Home from "./containers/Home.tsx";
 import ArtistDetailsPage from "./features/artists/ArtistDetailsPage.tsx";
 import AlbumDetailsPage from "./features/albums/AlbumDetailsPage.tsx";
+import Register from "./features/users/Register.tsx";
 
 
 const App = () => {
@@ -21,6 +22,7 @@ const App = () => {
               <Route path="/" element={<Home/>} />
               <Route path="/artist/:id" element={<ArtistDetailsPage />} />
               <Route path="/album/:id" element={<AlbumDetailsPage />} />
+              <Route path="/register" element={<Register />} />
           </Routes>
         </Container>
       </main>

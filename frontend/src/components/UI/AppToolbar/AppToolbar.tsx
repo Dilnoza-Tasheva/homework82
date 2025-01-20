@@ -1,4 +1,4 @@
-import { AppBar, styled, Toolbar, Typography } from '@mui/material';
+import {AppBar, Button, styled, Toolbar, Typography} from '@mui/material';
 import { Link as NavLink } from 'react-router-dom';
 
 const Link = styled(NavLink)({
@@ -16,6 +16,10 @@ const AppToolbar = () => {
         <Typography variant="h6" component="div" sx={{flexGrow: 1}}>
           <Link to="/">My music app</Link>
         </Typography>
+
+        <Button component={NavLink} to='/register' color="inherit">
+          Sing up
+        </Button>
       </Toolbar>
     </AppBar>
 

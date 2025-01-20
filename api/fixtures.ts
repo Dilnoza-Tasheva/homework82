@@ -20,7 +20,7 @@ const run = async () => {
     const [artist1, artist2] = await Artist.create(
         {
             name: 'Taylor Swift',
-            photo: 'fixtures/taylor_swift.jpg',
+            photo: 'public/fixtures/taylor_swift.jpg',
             information: 'Taylor Swift is a pop and country singer-songwriter.',
         },
         {

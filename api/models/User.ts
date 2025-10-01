@@ -36,6 +36,12 @@ const UserSchema = new Schema<HydratedDocument<UserFields>, UserModel, UserMetho
     token: {
         type: String,
         required: true,
+    },
+    role: {
+        type: String,
+        enum: ['admin', 'user'],
+        default: 'user',
+        required: true,
     }
 });
 

@@ -21,6 +21,11 @@ const TrackSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Artist',
         required: true,
+    },
+    isPublished: {
+        type: Boolean,
+        default: false,
+        required: true,
     }
 });
 

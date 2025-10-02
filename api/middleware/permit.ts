@@ -1,17 +1,18 @@
 import {RequestWithUser} from "./auth";
-import {NextFunction, Request, Response} from "express";
+import {NextFunction, Response, Request, RequestHandler} from "express";
 
-const permit = (...roles: string[]) => {
+const permit = (...roles: string[]): RequestHandler => {
     return (expressReq: Request, res: Response, next: NextFunction) => {
         const req = expressReq as RequestWithUser;
 
         if (!req.user) {
-            return res.status(401).send({'message': 'Unathorized'});
+            res.status(401).send({'message': 'Unathorized'});
+            return;
         }
         if (!roles.includes(req.user.role)) {
-            return res.status(403).send({'message':'Fordbidden'});
+            res.status(403).send({'message':'Fordbidden'});
+            return;
         }
-
         next();
     }
 };

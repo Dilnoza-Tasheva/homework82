@@ -2,6 +2,7 @@ import express from "express";
 import { Error } from 'mongoose';
 import User from "../models/User";
 import bcrypt from "bcrypt";
+import auth, {RequestWithUser} from "../middleware/auth";
 
 const userRouter = express.Router();
 
@@ -53,6 +54,20 @@ userRouter.post('/sessions', async (req, res, next) => {
             return;
         }
         next(error);
+    }
+});
+
+userRouter.delete('/sessions', auth, async (req, res, next) => {
+    try {
+        const request = req as RequestWithUser;
+        const user = request.user;
+
+        user.generateToken();
+        await user.save();
+
+        res.send({message: 'Logged out successfully'});
+    } catch (e) {
+        next(e);
     }
 });
 

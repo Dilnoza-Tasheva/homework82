@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import {UserFields} from "../types";
 import {randomUUID} from "node:crypto";
 
-interface UserMethods {
+export interface UserMethods {
     checkPassword(password: string): Promise<boolean>;
     generateToken(): void;
 }

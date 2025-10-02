@@ -1,15 +1,20 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams } from "react-router-dom";
-import {Typography, List, ListItem, ListItemText, Divider, Button} from "@mui/material";
+import {Typography, List, ListItem, ListItemText, Button} from "@mui/material";
 import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {selectTracks} from "../tracks/tracksSlice.ts";
 import {fetchTracksByAlbum} from "../tracks/tracksThunks.ts";
 import axiosApi from "../../../axiosApi.ts";
+import {selectUser} from "../users/usersSlice.ts";
 
 const AlbumDetailsPage = () => {
     const { id } = useParams();
     const dispatch = useAppDispatch();
     const tracks = useAppSelector(selectTracks);
+    const user = useAppSelector(selectUser);
+
+    const visibleTracks = tracks.filter(t => user?.role === "admin" || t.isPublished);
+
 
     useEffect(() => {
         if (id) dispatch(fetchTracksByAlbum(id));
@@ -40,25 +45,19 @@ const AlbumDetailsPage = () => {
                 Tracks
             </Typography>
             <List>
-                {tracks.map((track) => (
-                    <React.Fragment key={track._id}>
-                        <ListItem secondaryAction={
-                            <Button
-                                variant="contained"
-                                color="primary"
-                                onClick={() => handlePlayTrack(track._id)}
-                            >
-                                Play
-                            </Button>
-                        }
-                        >
-                            <ListItemText
-                                primary={`${track.trackNumber}. ${track.title}`}
-                                secondary={`Length: ${track.length}`}
-                            />
-                        </ListItem>
-                        <Divider />
-                    </React.Fragment>
+                {visibleTracks.map((track) => (
+                    <ListItem key={track._id} divider
+                              secondaryAction={
+                                  <Button variant="contained" color="primary" onClick={() => handlePlayTrack(track._id)}>
+                                      Play
+                                  </Button>
+                              }
+                    >
+                        <ListItemText
+                            primary={`${track.trackNumber}. ${track.title} ${user?.role === "admin" && !track.isPublished ? "(не опубликовано)" : ""}`}
+                            secondary={`Length: ${track.length}`}
+                        />
+                    </ListItem>
                 ))}
             </List>
         </div>

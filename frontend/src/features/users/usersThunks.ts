@@ -37,3 +37,17 @@ export const login = createAsyncThunk<User, LoginMutation, {rejectValue: GlobalE
         }
     }
 );
+
+export const logout = createAsyncThunk(
+    'users/logout',
+    async (_, { getState }) => {
+        const state = getState() as { users: { user: User | null } };
+        const token = state.users.user?.token;
+
+        if (token) {
+            await axiosApi.delete('/users/sessions', {
+                headers: { Authorization: token },
+            });
+        }
+    }
+);

@@ -3,12 +3,14 @@ export interface Album {
     title: string;
     releaseDate: number;
     coverImage?: string | null;
+    isPublished: boolean;
 }
 
 export interface Artist {
     _id: string;
     name: string;
     photo?: string | null;
+    isPublished: boolean;
 }
 
 export interface Track {
@@ -16,12 +18,14 @@ export interface Track {
     title: string;
     trackNumber: number;
     length: string;
+    isPublished: boolean;
 }
 
 export interface User {
     _id: string;
     username: string;
     token: string;
+    role: 'admin' | 'user';
 }
 
 export interface ValidationError {

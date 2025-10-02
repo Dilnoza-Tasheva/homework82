@@ -5,10 +5,13 @@ import {fetchArtists} from "../features/artists/artistsThunks.ts";
 import Grid from "@mui/material/Grid2";
 import {Card, CardActionArea, CardContent, CardMedia, Typography} from "@mui/material";
 import {Link} from "react-router-dom";
+import {selectUser} from "../features/users/usersSlice.ts";
 
 const Home = () => {
     const dispatch = useAppDispatch();
     const artists = useAppSelector(selectArtists);
+    const user = useAppSelector(selectUser);
+    const visibleArtists = artists.filter(a => user?.role === "admin" || a.isPublished);
 
     useEffect(() => {
         dispatch(fetchArtists());
@@ -20,8 +23,8 @@ const Home = () => {
                 Artists
             </Typography>
             <Grid container spacing={3}>
-                {artists.map((artist) => (
-                    <Grid size={{xs:12, sm:6, md:4}} key={artist._id}>
+                {visibleArtists.map(artist => (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={artist._id}>
                         <Card>
                             <CardActionArea component={Link} to={`/artist/${artist._id}`}>
                                 <CardMedia
@@ -31,14 +34,20 @@ const Home = () => {
                                     alt={artist.name}
                                 />
                                 <CardContent>
-                                    <Typography variant="h6">{artist.name}</Typography>
+                                    <Typography variant="h6">
+                                        {artist.name}{" "}
+                                        {user?.role === "admin" && !artist.isPublished && (
+                                            <Typography component="span" color="error">
+                                                не опубликовано
+                                            </Typography>
+                                        )}
+                                    </Typography>
                                 </CardContent>
                             </CardActionArea>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
-
         </div>
     );
 };

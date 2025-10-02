@@ -5,11 +5,16 @@ import {useAppDispatch, useAppSelector} from "../../app/hooks.ts";
 import {selectAlbums} from "../albums/albumsSlice.ts";
 import {fetchAlbumsByArtist} from "../albums/albumsThunks.ts";
 import Grid from "@mui/material/Grid2";
+import {selectUser} from "../users/usersSlice.ts";
 
 const ArtistDetailsPage = () => {
     const { id } = useParams();
     const dispatch = useAppDispatch();
     const albums = useAppSelector(selectAlbums);
+    const user = useAppSelector(selectUser);
+
+    const visibleAlbums = albums.filter(a => user?.role === "admin" || a.isPublished);
+
 
     useEffect(() => {
         if (id) dispatch(fetchAlbumsByArtist(id));
@@ -21,8 +26,8 @@ const ArtistDetailsPage = () => {
                 Albums
             </Typography>
             <Grid container spacing={3}>
-                {albums.map((album) => (
-                    <Grid size={{xs:12, sm:6, md:4}} key={album._id}>
+                {visibleAlbums.map(album => (
+                    <Grid size={{ xs: 12, sm: 6, md: 4 }} key={album._id}>
                         <Card>
                             <CardActionArea component={Link} to={`/album/${album._id}`}>
                                 <CardMedia
@@ -32,7 +37,14 @@ const ArtistDetailsPage = () => {
                                     alt={album.title}
                                 />
                                 <CardContent>
-                                    <Typography variant="h6">{album.title}</Typography>
+                                    <Typography variant="h6">
+                                        {album.title}{" "}
+                                        {user?.role === "admin" && !album.isPublished && (
+                                            <Typography component="span" color="error">
+                                                не опубликовано
+                                            </Typography>
+                                        )}
+                                    </Typography>
                                     <Typography variant="body2" color="textSecondary">
                                         {album.releaseDate}
                                     </Typography>
@@ -45,5 +57,6 @@ const ArtistDetailsPage = () => {
         </div>
     );
 };
+
 
 export default ArtistDetailsPage;

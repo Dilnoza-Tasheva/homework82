@@ -4,6 +4,7 @@ import Grid from "@mui/material/Grid2";
 import {useAppSelector} from "../../../app/hooks.ts";
 import {selectUser} from "../../../features/users/usersSlice.ts";
 import { Link as RouterLink } from 'react-router-dom';
+import UserMenu from "./UserMenu.tsx";
 
 const Link = styled(NavLink)({
   color: 'inherit',
@@ -30,9 +31,23 @@ const AppToolbar = () => {
                   <Button component={RouterLink} to="/track-history" color="inherit">
                     Track History
                   </Button>
-                  <Button component={RouterLink} to="/logout" color="inherit">
-                    Logout
+
+                  {user?.role === "admin" && (
+                      <Button component={RouterLink} to="/admin/artists" color="inherit">
+                        Admin Artists
+                      </Button>
+                  )}
+
+                  <Button component={RouterLink} to="/artists/new" color="inherit">
+                    Add Artist
                   </Button>
+                  <Button component={RouterLink} to="/albums/new" color="inherit">
+                    Add Album
+                  </Button>
+                  <Button component={RouterLink} to="/tracks/new" color="inherit">
+                    Add Track
+                  </Button>
+                  <UserMenu user={user} />
                 </>
             ) : (
                 <>

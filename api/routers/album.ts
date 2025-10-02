@@ -2,6 +2,8 @@ import express from "express";
 import Album from "../models/Album";
 import {imagesUpload} from "../multer";
 import Artist from "../models/Artist";
+import auth from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const albumsRouter = express.Router();
 
@@ -49,7 +51,7 @@ albumsRouter.get('/:id', async (req, res, next) => {
     }
 });
 
-albumsRouter.post('/', imagesUpload.single('coverImage'), async (req, res, next) => {
+albumsRouter.post('/', auth, imagesUpload.single('coverImage'), async (req, res, next) => {
 
     if (req.body.artist) {
         const artist = await Artist.findById(req.body.artist);
@@ -68,6 +70,34 @@ albumsRouter.post('/', imagesUpload.single('coverImage'), async (req, res, next)
 
     try {
         const album = new Album(newAlbum);
+        await album.save();
+        res.send(album);
+    } catch (e) {
+        next(e);
+    }
+});
+
+albumsRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+    try {
+       const album = await Album.findByIdAndDelete(req.params.id);
+       if (!album) {
+           res.status(404).send({message: 'Album not found'});
+           return;
+       }
+       res.send({message: 'Alubm deleted'});
+    }catch (e) {
+        next (e);
+    }
+});
+
+albumsRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const album = await Album.findById(req.params.id);
+        if (!album) {
+            res.status(404).send({message: "Album not found"});
+            return;
+        }
+        album.isPublished = !album.isPublished;
         await album.save();
         res.send(album);
     } catch (e) {

@@ -1,6 +1,8 @@
 import express from "express";
 import Track from "../models/Track";
 import Album from "../models/Album";
+import auth from "../middleware/auth";
+import permit from "../middleware/permit";
 
 const tracksRouter = express.Router();
 
@@ -21,7 +23,7 @@ tracksRouter.get('/', async (req, res, next) => {
     }
 });
 
-tracksRouter.post('/', async (req, res, next) => {
+tracksRouter.post('/', auth, async (req, res, next) => {
     if (req.body.album) {
         const album = await Album.findById(req.body.album);
         if (!album) {
@@ -38,6 +40,34 @@ tracksRouter.post('/', async (req, res, next) => {
 
     try {
         const track = new Track(newTrack);
+        await track.save();
+        res.send(track);
+    } catch (e) {
+        next(e);
+    }
+});
+
+tracksRouter.delete('/:id', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const track = await Track.findByIdAndDelete(req.params.id);
+        if (!track) {
+            res.status(404).send({message: "Track not found"});
+            return;
+        }
+        res.send({message: "Track deleted"});
+    } catch (e) {
+        next(e);
+    }
+});
+
+tracksRouter.patch('/:id/togglePublished', auth, permit('admin'), async (req, res, next) => {
+    try {
+        const track = await Track.findById(req.params.id);
+        if (!track) {
+            res.status(404).send({message: "Track not found"});
+            return;
+        }
+        track.isPublished = !track.isPublished;
         await track.save();
         res.send(track);
     } catch (e) {

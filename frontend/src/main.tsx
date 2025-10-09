@@ -5,15 +5,20 @@ import {Provider} from "react-redux";
 import {BrowserRouter} from "react-router-dom";
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from './app/store';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import {GOOGLE_CLIENT_ID} from "../globalConstants.ts";
 
 createRoot(document.getElementById('root')!).render(
+
   <StrictMode>
-      <Provider store={store}>
+      <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
+        <Provider store={store}>
           <PersistGate persistor={persistor}>
             <BrowserRouter>
                 <App />
             </BrowserRouter>
           </PersistGate>
-      </Provider>
+        </Provider>
+      </GoogleOAuthProvider>,
   </StrictMode>,
 )

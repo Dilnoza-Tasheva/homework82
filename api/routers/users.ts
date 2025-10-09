@@ -5,25 +5,52 @@ import bcrypt from "bcrypt";
 import auth, {RequestWithUser} from "../middleware/auth";
 
 const userRouter = express.Router();
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-userRouter.post('/', async (req, res, next) => {
+userRouter.post("/google", async (req, res, next) => {
     try {
-        const user = new User({
-           username: req.body.username,
-           password: req.body.password,
+        const { credential } = req.body;
+        const ticket = await client.verifyIdToken({
+            idToken: credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
         });
 
-        user.generateToken();
+        const payload = ticket.getPayload();
 
-        await user.save();
-        res.send(user);
-
-    } catch (error) {
-        if (error instanceof  Error.ValidationError) {
-            res.status(400).send(error);
+        if (!payload) {
+            res.status(400).send({ error: "Google login error!" });
             return;
         }
-        next(error);
+
+        const email = payload["email"];
+        const googleID = payload["sub"];
+        const displayName = payload["name"];
+        const avatar = payload["picture"];
+
+        if (!email) {
+            res.status(400).send({ error: "Not enough user data to continue" });
+            return;
+        }
+
+        let user = await User.findOne({ googleID });
+
+        if (!user) {
+            user = new User({
+                username: email,
+                password: crypto.randomUUID(),
+                googleID,
+                displayName,
+                avatar,
+            });
+        }
+
+        user.generateToken();
+        await user.save();
+
+        res.send({ message: "Login with Google successful!", user });
+        return;
+    } catch (e) {
+        next(e);
     }
 });
 

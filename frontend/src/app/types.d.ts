@@ -26,6 +26,9 @@ export interface User {
     username: string;
     token: string;
     role: 'admin' | 'user';
+    displayName: string;
+    avatar?: string | null;
+    googleId?: string | null;
 }
 
 export interface ValidationError {
@@ -48,6 +51,8 @@ export interface RegisterResponse {
 export interface RegisterMutation {
     username: string;
     password: string;
+    displayName: string;
+    avatar: File | null;
 }
 
 export interface LoginMutation {

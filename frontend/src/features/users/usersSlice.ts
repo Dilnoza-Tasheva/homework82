@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {login, logout, register} from './usersThunks';
+import {googleLogin, login, logout, register} from './usersThunks';
 import {RootState} from "../../app/store.ts";
 import {GlobalError, User, ValidationError} from "../../app/types";
 
@@ -57,7 +57,18 @@ export const usersSlice = createSlice({
             })
             .addCase(logout.fulfilled, (state) => {
                 state.user = null;
-            });
+            })
+            .addCase(googleLogin.pending, (state) => {
+                state.loginLoading = true;
+            })
+            .addCase(googleLogin.fulfilled, (state, { payload: user }) => {
+                state.loginLoading = false;
+                state.user = user;
+            })
+            .addCase(googleLogin.rejected, (state, { payload: error }) => {
+                state.loginLoading = false;
+                state.loginError = error || null;
+        });
     }
 });
 

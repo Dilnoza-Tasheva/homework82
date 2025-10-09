@@ -27,6 +27,9 @@ export interface UserFields {
     password: string;
     token: string;
     role: 'admin' | 'user';
+    displayName: string;
+    avatar?: string;
+    googleID?: string;
 }
 
 export interface TrackHistory {
